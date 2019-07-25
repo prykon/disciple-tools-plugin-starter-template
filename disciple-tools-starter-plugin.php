@@ -174,6 +174,8 @@ class DT_Starter_Plugin {
         // sample rest api class
         require_once( 'includes/rest-api.php' );
         DT_Starter_Plugin_Endpoints::instance();
+        require_once( 'includes/functions.php' );
+        DT_Starter_Plugin_Functions::instance();
     }
 
     /**

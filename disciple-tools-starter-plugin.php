@@ -79,7 +79,7 @@ function dt_starter_plugin() {
      * Don't load the plugin on every rest request. Only those with the 'sample' namespace
      */
     $is_rest = dt_is_rest();
-    if ( !$is_rest || strpos( dt_get_url_path(), 'sample' ) != false ){
+    if ( !$is_rest || strpos( dt_get_url_path(), 'dt-posts' ) != false ){
         return DT_Starter_Plugin::get_instance();
     }
 }

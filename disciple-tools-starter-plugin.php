@@ -79,6 +79,7 @@ function dt_starter_plugin() {
      * Don't load the plugin on every rest request. Only those with the 'sample' namespace
      */
     $is_rest = dt_is_rest();
+    //@todo change 'dt-posts' if you want the plugin to be set up when using rest api calls other than ones on contact and groups
     if ( !$is_rest || strpos( dt_get_url_path(), 'dt-posts' ) != false ){
         return DT_Starter_Plugin::get_instance();
     }

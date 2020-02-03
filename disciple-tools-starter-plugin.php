@@ -26,12 +26,12 @@
 
 /**
  * Refactoring (renaming) this plugin as your own:
- * 1. Refactor all occurrences of the name DT_Starter, dt_starter, dt-starter and Starter Plugin with you're own
+ * 1. @todo Refactor all occurrences of the name DT_Starter, dt_starter, dt-starter and Starter Plugin with you're own
  * name for the `disciple-tools-starter-plugin.php and menu-and-tabs.php files.
- * 2. Update the README.md and LICENSE
- * 3. Update the default.pot file if you intend to make your plugin multilingual. Use a tool like POEdit
- * 4. Change the translation domain to in the phpcs.xml your plugin's domain: @todo
- * 5 Replace 'sample' in this and the rest-api.php files
+ * 2. @todo Update the README.md and LICENSE
+ * 3. @todo Update the default.pot file if you intend to make your plugin multilingual. Use a tool like POEdit
+ * 4. @todo Change the translation domain to in the phpcs.xml your plugin's domain: @todo
+ * 5 @todo Replace the 'sample' namespace in this and the rest-api.php files
  */
 
 /**
@@ -64,7 +64,8 @@ function dt_starter_plugin() {
     /*
      * Check if the Disciple.Tools theme is loaded and is the latest required version
      */
-    if ( 'disciple-tools-theme' !== $wp_theme->get_template() || $version < $dt_starter_required_dt_theme_version ) {
+    $is_theme_dt = strpos( $wp_theme->get_template(), "disciple-tools-theme" ) !== false || $wp_theme->name === "Disciple Tools";
+    if ( !$is_theme_dt || version_compare( $version, $dt_starter_required_dt_theme_version, "<" ) ) {
         add_action( 'admin_notices', 'dt_starter_plugin_hook_admin_notice' );
         add_action( 'wp_ajax_dismissed_notice_handler', 'dt_hook_ajax_notice_handler' );
         return new WP_Error( 'current_theme_not_dt', 'Disciple Tools Theme not active or not latest version.' );
@@ -84,7 +85,7 @@ function dt_starter_plugin() {
         return DT_Starter_Plugin::get_instance();
     }
 }
-add_action( 'plugins_loaded', 'dt_starter_plugin' );
+add_action( 'after_setup_theme', 'dt_starter_plugin' );
 
 /**
  * Singleton class for setting up the plugin.

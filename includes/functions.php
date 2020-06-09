@@ -44,9 +44,9 @@ class DT_Starter_Plugin_Functions
     }
 
     public static function dt_search_fields( array $fields ) {
-      //add the "language" field added in the dt_contact_fields function to search
-      array_push( $fields, "language" );
-      return $fields;
+        //add the "language" field added in the dt_contact_fields function to search
+        array_push( $fields, "language" );
+        return $fields;
     }
 
     public function dt_declare_section_id( $sections, $post_type = "" ){

@@ -17,6 +17,7 @@ class DT_Starter_Plugin_Functions
 
     public function __construct() {
         add_filter( "dt_custom_fields_settings", [ $this, "dt_contact_fields" ], 1, 2 );
+        add_filter( "dt_search_extra_post_meta_fields", array( $this, "dt_search_fields" ), 10, 1 );
         add_filter( "dt_details_additional_section_ids", [ $this, "dt_declare_section_id" ], 999, 2 );
         add_action( "dt_details_additional_section", [ $this, "dt_add_section" ] );
 
@@ -39,6 +40,12 @@ class DT_Starter_Plugin_Functions
             }
         }
         //don't forget to return the update fields array
+        return $fields;
+    }
+
+    public static function dt_search_fields( array $fields ) {
+        //add the "language" field added in the dt_contact_fields function to search
+        array_push( $fields, "language" );
         return $fields;
     }
 

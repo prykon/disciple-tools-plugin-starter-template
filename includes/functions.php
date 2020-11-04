@@ -18,8 +18,9 @@ class DT_Starter_Plugin_Functions
     public function __construct() {
         add_filter( "dt_custom_fields_settings", [ $this, "dt_contact_fields" ], 1, 2 );
         add_filter( "dt_search_extra_post_meta_fields", array( $this, "dt_search_fields" ), 10, 1 );
-        add_filter( "dt_details_additional_section_ids", [ $this, "dt_declare_section_id" ], 999, 2 );
-        add_action( "dt_details_additional_section", [ $this, "dt_add_section" ] );
+        add_filter( 'dt_details_additional_tiles', [ $this, 'dt_details_additional_tiles' ], 10, 2 );
+
+        add_action( "dt_details_additional_section", [ $this, "dt_add_section" ], 30, 2 );
 
     }
 
@@ -35,7 +36,8 @@ class DT_Starter_Plugin_Functions
                     "default" => [
                         "english" => __( "English", "disciple_tools_language" ),
                         "french" => __( "French", "disciple_tools_language" )
-                    ]
+                    ],
+                    'tile' => 'contact_language'
                 ];
             }
         }
@@ -62,11 +64,15 @@ class DT_Starter_Plugin_Functions
         return $sections;
     }
 
-    public function dt_add_section( $section ) {
-        if ( $section == "contact_language" ) {
-            $contact_id     = get_the_ID();
-            $contact_fields = Disciple_Tools_Contact_Post_Type::instance()->get_custom_fields_settings();
-            $contact        = Disciple_Tools_Contacts::get_contact( $contact_id, true )
+    public function dt_details_additional_tiles( $tiles, $post_type = "" ){
+        if ( $post_type === "contacts" ){
+            $tiles["contact_language"] = [ "label" => __( "Language", 'disciple_tools' ) ];
+        }
+        return $tiles;
+    }
+
+    public function dt_add_section( $section, $post_type ) {
+        if ( $section === "contact_language" && $post_type === "contacts" ) {
             ?>
             <!-- need you own css? -->
             <style type="text/css">
@@ -75,26 +81,7 @@ class DT_Starter_Plugin_Functions
                 }
             </style>
 
-            <label class="section-header">
-                <?php esc_html_e( 'Language', 'disciple_tools' ) ?>
-            </label>
-            <div class="section-subheader">
-                <?php esc_html_e( 'Spoken Language', 'disciple_tools' ) ?> <span class="required-style-example">*</span>
-            </div>
-            <select class="select-field" id="language" style="margin-bottom: 0px">
-                <?php
-                foreach ( $contact_fields["language"]["default"] as $key => $value ) {
-                    if ( $contact["language"]["key"] === $key ) {
-                        ?>
-                        <option value="<?php echo esc_html( $key ) ?>"
-                                selected><?php echo esc_html( $value["label"] ); ?></option>
-                    <?php } else { ?>
-                        <option value="<?php echo esc_html( $key ) ?>"><?php echo esc_html( $value["label"] ); ?></option>
-                    <?php }
-                }
-                ?>
-            </select>
-
+            <p class="required-style-example"> Wanna know something cool? D.T is translated into multiple languages. <a href="https://disciple.tools/translation/">Check it out!</a></p>
 
             <script type="application/javascript">
                 //enter jquery here if you need it
@@ -103,8 +90,6 @@ class DT_Starter_Plugin_Functions
             </script>
             <?php
         }
-
-        //add more sections here if you want...
     }
 
 }
